@@ -10,18 +10,9 @@
   </div>
 </div>    
 
+<div *ngIf="vehicleService.state.loading">loading...</div>
 <div class="vehicle-pagination" *ngIf="vehicles | async">
-    <div>
-        Page
-    </div>
-    <input type="number"
-        (change)="setPage($event.target.value)" 
-        min="1" 
-        [value]="vehicleService.params.getValue().page" 
-        [max]="vehicleService.state.pages">
-    <div class="input-group-append">
-        <div class="input-group-text">
-            of {{ vehicleService.state.pages || 0 }} 
-        </div>
-    </div>
+    <div class="vehicle-pagination-item" *ngFor="let page of vehicleService.state.pages; let i = index" [attr.data-index]="i">
+           <a href="javascript:void(0);" (click)="setPage(i+1)">{{i+1}}</a> 
+    </div>   
 </div>

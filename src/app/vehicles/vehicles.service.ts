@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, merge, of } from 'rxjs';
 import { share, map, switchMap } from 'rxjs/operators';
 
 interface Params{
@@ -26,8 +26,9 @@ export class VehiclesService {
   api_url = "https://swapi.co/api/vehicles/";
 
   state = {
+    loading: false,
     total: 0,
-    pages: 1
+    pages: [1]
   }
 
   params = new BehaviorSubject<Params>({
@@ -45,8 +46,9 @@ export class VehiclesService {
 
   setTotal(total:number){
     this.state = {
+      ...this.state,
       total,
-      pages: Math.ceil(total / this.params.getValue().perpage)
+      pages: Array(Math.ceil(total / this.params.getValue().perpage))
     }
   }
 
@@ -67,15 +69,27 @@ export class VehiclesService {
 
   getVehicles() {
     return this.params.pipe(      
-      switchMap( params => this.http.get<VehicleResponse>(this.api_url,{
-        params:{
-          search: params.query,          
-          page: ""+params.page
+      switchMap( params => 
+        merge(
+          of(null),
+          this.http.get<VehicleResponse>(this.api_url,{
+            params:{
+              search: params.query,          
+              page: ""+params.page
+            }
+          })
+        ),
+      ),      
+      map( (response:VehicleResponse) => {   
+        if(response) {
+          this.setTotal(+response.count);
+          this.state.loading = false;
+          return response.results;
+        }     
+        else {
+          this.state.loading = true;
+          return [];          
         }
-      })),      
-      map( (response:VehicleResponse) => {        
-        this.setTotal(+response.count);
-        return response.results
       }),
       share(),      
     )

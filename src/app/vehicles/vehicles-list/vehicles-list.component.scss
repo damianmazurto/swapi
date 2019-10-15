@@ -36,6 +36,9 @@ h3 {
 .vehicle-pagination {
     display: flex;
     justify-content: space-between;
-    margin-top: 10px;
-    width: 100px;
+    margin-top: 10px;    
+}
+
+.vehicle-pagination-item {
+    margin: 0 10px;
 }

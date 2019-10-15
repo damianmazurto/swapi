@@ -1,0 +1,41 @@
+:host {
+    display: flex;
+    width: 500px;    
+    flex-direction: column;
+    align-items: center;
+
+}
+
+h3 {
+    color:red;
+}
+
+
+.search-group {
+    width: 100%;
+    margin-bottom: 10px;
+
+    input {             
+        width: 100%;    
+        font-size: 16px;
+        padding: 2px 10px;
+    }
+}
+
+.vehicle-group {
+    width: 100%;
+    text-align: center;
+}
+
+.vehicle-group-item {
+    margin: 5px;
+    padding: 15px 20px;
+    background-color: yellow;
+}
+
+.vehicle-pagination {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    width: 100px;
+}

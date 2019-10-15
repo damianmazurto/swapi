@@ -1,0 +1,27 @@
+<h3>Search Vehicles</h3>
+<div class="search-group">
+    <input type="text" class="form-control" (keyup.enter)="search($event.target.value)" placeholder="Type query and press enter ..."
+    [value]="vehicleService.params.getValue().query">
+</div>
+
+<div class="vehicle-group">
+  <div class="vehicle-group-item" *ngFor="let vehicle of vehicles | async">
+     {{vehicle.name}} - {{vehicle.model}}
+  </div>
+</div>    
+
+<div class="vehicle-pagination" *ngIf="vehicles | async">
+    <div>
+        Page
+    </div>
+    <input type="number"
+        (change)="setPage($event.target.value)" 
+        min="1" 
+        [value]="vehicleService.params.getValue().page" 
+        [max]="vehicleService.state.pages">
+    <div class="input-group-append">
+        <div class="input-group-text">
+            of {{ vehicleService.state.pages || 0 }} 
+        </div>
+    </div>
+</div>
